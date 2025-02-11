@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -27,10 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.tp2navigationcompose.ui.theme.TP2NavigationComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -59,6 +60,29 @@ fun AppNavigation(){
         composable("form"){
             FormScreen(navController = navController)
         }
+        composable(
+            route = "display/{name}",
+            arguments = listOf(navArgument("name") { defaultValue = "" })
+        ) { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            DisplayScreen(navController = navController, name)
+        }
+    }
+}
+
+@Composable
+fun DisplayScreen(navController: NavHostController, name: String) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(text = "Affichage du formulaire",
+            style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = { navController.popBackStack() }){
+            Text(text = "Retour")
+        }
     }
 }
 
@@ -79,7 +103,9 @@ fun FormScreen(navController: NavController) {
             label = { Text("Entrez votre nom") },
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = { navController.navigate("display/$name") }){
+            Text(text = "Valider")
+        }
         Button(onClick = { navController.popBackStack() }){
             Text(text = "Retour")
         }
