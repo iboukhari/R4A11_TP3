@@ -80,9 +80,15 @@ fun DisplayScreen(navController: NavHostController, name: String) {
         Text(text = "Affichage du formulaire",
             style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = name,
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { navController.popBackStack() }){
             Text(text = "Retour")
         }
+
     }
 }
 
